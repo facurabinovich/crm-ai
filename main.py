@@ -87,13 +87,15 @@ def add_assistant_message(messages, message):
     messages.append(assistant_message)
  
  
+# Wrapper sobre client.messages.stream(). Construye el dict de parámetros dinámicamente
+# Devuelve el stream para iterar token a token. Llama a API de Anthropic y devuelve un stream de tokens. 
+# Al final, se puede llamar a get_final_message() para obtener el mensaje completo.
 def chat_stream(
     messages,
     system=None,
     temperature=0,
     tools=None,
     tool_choice=None,
-    betas=[],
 ):
     params = {
         "model": model,
@@ -156,7 +158,7 @@ def run_tools(message):
 def main():
     messages = []
     system_prompt = (
-        "Sos un asistente bancario. Antes de decir que no tenés información sobre "
+        "Sos un asistente bancario del Banco Macro. Antes de decir que no tenés información sobre "
         "un producto, servicio, política o condición del banco, usá siempre la "
         "herramienta buscar_info_bancaria para verificar en la base de conocimiento."
     )
@@ -172,14 +174,16 @@ def main():
 
         # --- Primer roundtrip ---
         # Streameamos el texto que Claude manda antes de decidir si usa una tool
-        print("Claude: ", end="", flush=True)
+        print("Claude: ", end="", flush=True) # end="" para que no haga salto de linea y flush=True 
+        #para que se vea en tiempo real
         with chat_stream(messages, system=system_prompt, tools=TOOL_SCHEMAS) as stream:
             for text in stream.text_stream:
                 print(text, end="", flush=True)
             print()  # salto de linea al terminar el stream
             response = stream.get_final_message()  # necesitamos el mensaje completo para chequear stop_reason
 
-        if response.stop_reason == "tool_use":
+        if response.stop_reason == "tool_use": # esta afuera del with porque necesitamos el mensaje 
+            # completo para chequear stop_reason
             # Paso 1: guardar la respuesta de Claude (con el tool_use) en messages
             add_assistant_message(messages, response)
 
@@ -198,7 +202,7 @@ def main():
                 print()  # salto de linea al terminar
                 final_response = stream.get_final_message()
 
-            # Paso 5: guardar la respuesta final en el historial
+            # Ultimo paso: guardar la respuesta final en el historial
             add_assistant_message(messages, final_response)
 
         else:
