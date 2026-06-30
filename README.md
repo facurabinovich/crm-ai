@@ -36,28 +36,40 @@ y un frontend web simple (Flask) para demo.
 
 ## Setup
 
-```bash
-python -m venv .venv
-source .venv/bin/activate
-pip install -r requirements.txt
-```
+### Docker (recomendado)
 
-Crear un archivo `.env` con las API keys necesarias:
+Crear un archivo `.env` con las API keys:
 
 ```
 ANTHROPIC_API_KEY=sk-ant-...
 VOYAGE_API_KEY=pa-...
 ```
 
-Crear la base de datos del CRM (una sola vez):
+```bash
+docker compose up --build
+```
+
+El primer arranque crea la base de datos e indexa la base de conocimiento automáticamente (~5 min por rate limits de VoyageAI). Los siguientes arranques son instantáneos porque los datos persisten en un volumen Docker.
+
+Abrir http://localhost:5000
+
+### Manual
+
+```bash
+python -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
+```
+
+Crear un archivo `.env` con las API keys:
+
+```
+ANTHROPIC_API_KEY=sk-ant-...
+VOYAGE_API_KEY=pa-...
+```
 
 ```bash
 python setup_db.py
-```
-
-Indexar la base de conocimiento para el RAG (una sola vez, o cuando cambien los docs):
-
-```bash
 python -c "
 from rag import indexar_documento
 from chunking import chunk_by_section
@@ -67,8 +79,6 @@ with open('docs/banco_macro.md', encoding='utf-8') as f:
 indexar_documento(chunk_by_section(texto))
 "
 ```
-
-## Uso
 
 Version consola:
 
