@@ -5,4 +5,5 @@ __pycache__/
 venv/
 chroma_db/
 crm.db
+data/
 .claude/

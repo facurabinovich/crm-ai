@@ -13,7 +13,7 @@ Esto genera (o recrea) el archivo crm.db en el mismo directorio.
 import sqlite3
 from datetime import date
 
-DB_PATH = "crm.db"
+DB_PATH = "data/crm.db"
 
 
 def crear_tablas(conn: sqlite3.Connection) -> None:

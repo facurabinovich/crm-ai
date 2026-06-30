@@ -26,7 +26,7 @@ from anthropic.types import ToolParam
 
 load_dotenv()
 VOYAGE_MODEL = "voyage-3-large"
-CHROMA_PATH = "chroma_db"
+CHROMA_PATH = "data/chroma_db"
 COLLECTION_NAME = "banco_macro"
 BATCH_SIZE = 5          # cantidad de chunks por llamada a VoyageAI
 PAUSA_ENTRE_BATCHES = 20  # segundos, para no superar 3 RPM / 10K TPM del free tier

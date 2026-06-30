@@ -4,6 +4,16 @@ Asistente conversacional para un CRM bancario que combina **tool calling**
 y **RAG** sobre el SDK de Anthropic (Claude). Incluye una version de consola
 y un frontend web simple (Flask) para demo.
 
+## Demo
+
+**Tool calling** — consulta de saldo, pagos y límite de tarjeta:
+
+![Tool calling demo](gifs/tool-calling%20example.gif)
+
+**RAG** — búsqueda semántica sobre la base de conocimiento del banco:
+
+![RAG demo](gifs/rag%20example.gif)
+
 ## Estructura
 
 - `main.py` — loop de chat por consola, orquesta tool calling y RAG.
